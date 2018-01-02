@@ -17,27 +17,37 @@ namespace OCR.Engines
 
         public static string Recognize(string path, bool languagePolish = false)
         {
-            string language = "eng";
-            string text = string.Empty;
-            if (languagePolish)
+            try
             {
-                language = "pol";
+                string language = "eng";
+                string text = string.Empty;
+                if (languagePolish)
+                {
+                    language = "pol";
+                }
+                var request = new RestRequest(Method.POST);
+                request.AddParameter("apikey", "113cfeaad888957");
+                request.AddParameter("language", language);
+                request.AddFile("image", path);
+                IRestResponse response = _client.Execute(request);
+
+                var json = response.Content; // raw content as string
+                var obj = JsonConvert.DeserializeObject<JsonModel>(json);
+
+                foreach (var item in obj.ParsedResults)
+                {
+                    text += item.ParsedText;
+                }
+
+                return text;
             }
-            var request = new RestRequest(Method.POST);
-            request.AddParameter("apikey", "113cfeaad888957");
-            request.AddParameter("language", language);
-            request.AddFile("image", path);
-            IRestResponse response = _client.Execute(request);
-
-            var json = response.Content; // raw content as string
-            var obj = JsonConvert.DeserializeObject<JsonModel>(json);
-
-            foreach(var item in obj.ParsedResults)
+            catch
             {
-                text += item.ParsedText;
+                return "Can't recognize text - OCRSpace framework error";
             }
+            
 
-            return text;
+
 
         }
 

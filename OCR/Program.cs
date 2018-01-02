@@ -19,9 +19,9 @@ namespace OCR
 
             foreach(var image in pathList)
             {
-                //var temp = new Tester(image,true);
+                var temp = new Tester(image,true);
             }
-            var tester = new Tester(@"C:\Users\Akihito\source\repos\Engineer's Thesis\OCR\bin\Debug\tested.jpg",true);
+           // var tester = new Tester(@"C:\Users\Akihito\source\repos\Engineer's Thesis\OCR\bin\Debug\tested.jpg",true);
 
             Console.ReadKey();
         }

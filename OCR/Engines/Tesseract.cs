@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -84,17 +85,29 @@ namespace OCR
             return output;
         }
 
-        public static string Recognize(string path)
+        public static string Recognize(string path, bool languagePolish = false)
         {
+            string language = "eng";
+
+            if (languagePolish)
+            {
+                language = "pol";
+            }
+
             try
             {
-                var solutionDirectory = Path.GetFullPath($@"..\..");
+                var solutionPath  = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembl‌​y().Location);
+                var solutionDirectory = Path.GetFullPath(Path.Combine(solutionPath, @"..\..\"));
                 string tesseractPath = solutionDirectory + @"\tesseract-master.1244";
-                tesseractPath = @"C:\Users\Akihito\source\repos\Engineer's Thesis\OCR\tesseract-master.1244";
+               // tesseractPath = @"C:\Users\Akihito\source\repos\Engineer's Thesis\OCR\tesseract-master.1244";
 
                 var imageFile = File.ReadAllBytes(path);
-                var text = ParseText(tesseractPath, imageFile, "eng", "pol");
+                var text = ParseText(tesseractPath, imageFile, language);
                 return text;
+            }
+            catch (FileNotFoundException)
+            {
+                return "Błędna ścieżka pliku/brak pliku";
             }
             catch
             {

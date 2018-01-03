@@ -4,6 +4,7 @@ using OCR.Model;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,6 +41,10 @@ namespace OCR.Engines
                 }
 
                 return text;
+            }
+            catch (FileNotFoundException)
+            {
+                return "Błędna ścieżka pliku/brak pliku";
             }
             catch
             {
